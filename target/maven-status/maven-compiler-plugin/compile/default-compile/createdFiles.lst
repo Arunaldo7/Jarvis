@@ -1,5 +1,6 @@
 com\support\automate\jarvis\BasicPipelineExample.class
 com\support\automate\jarvis\App.class
 com\support\automate\jarvis\SimpleExample.class
+com\support\automate\jarvis\ConnectPostgres.class
 com\support\automate\jarvis\TestNlp.class
 com\support\automate\jarvis\SimpleCoreNLPDemo.class
