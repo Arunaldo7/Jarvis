@@ -1,5 +1,8 @@
 package com.support.automate.jarvis;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
@@ -16,15 +19,20 @@ import edu.stanford.nlp.util.CoreMap;
 
 public class TestNlp {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		String inputText = "Could you please let us know when the file abcd.txt will be delivered and GP-40-1-FB will be posted";
+		//String inputText = "Could you please let us know when the file abcd.txt will be delivered and GP-40-1-FB will be posted";
+		
+		String inputText = "";
+		
+		FileReader inputFile = new FileReader("src/test/resources/sample-content.txt");
+		BufferedReader reader = new BufferedReader(inputFile);
+	    String line = reader.readLine();
 
-		// Next we generate an annotation object that we will use to annotate
-		// the text with
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String currentTime = formatter.format(System.currentTimeMillis());
-
+	    while (line != null) {
+	    	inputText += line;
+	        line = reader.readLine();
+	    }
 		Properties props = new Properties();
 
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
@@ -32,8 +40,6 @@ public class TestNlp {
 		StanfordCoreNLP pipeLine = new StanfordCoreNLP(props);
 
 		Annotation document = new Annotation(inputText);
-
-		//document.set(CoreAnnotations.DocDateAnnotation.class, currentTime);
 
 		// Finally we use the pipeline to annotate the document we created
 		pipeLine.annotate(document);
