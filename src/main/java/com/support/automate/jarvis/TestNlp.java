@@ -1,9 +1,8 @@
 package com.support.automate.jarvis;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,29 +18,58 @@ import edu.stanford.nlp.util.CoreMap;
 
 public class TestNlp {
 
+	String[] verbPos = { "RB", "VB" };
+	String[] nouns = { "JJ", "NN" };
+
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		//String inputText = "Could you please let us know when the file abcd.txt will be delivered and GP-40-1-FB will be posted";
-		
-		String inputText = "";
-		
-		FileReader inputFile = new FileReader("src/test/resources/sample-content.txt");
-		BufferedReader reader = new BufferedReader(inputFile);
-	    String line = reader.readLine();
+		// String inputText = "Could you please let us know when the file
+		// abcd.txt will be delivered and GP-40-1-FB will be posted";
 
-	    while (line != null) {
-	    	inputText += line;
-	        line = reader.readLine();
-	    }
+		/*
+		 * String inputText = "";
+		 * 
+		 * FileReader inputFile = new
+		 * FileReader("src/test/resources/sample-content.txt"); BufferedReader
+		 * reader = new BufferedReader(inputFile); String line =
+		 * reader.readLine();
+		 * 
+		 * while (line != null) { inputText += line; line = reader.readLine(); }
+		 */
 		Properties props = new Properties();
 
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 
-		StanfordCoreNLP pipeLine = new StanfordCoreNLP(props);
+		String entity = "BIDNOFP15";
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        @SuppressWarnings("deprecation")
+		String date = dateFormat.format( new Date("15-JAN-2017"));
 
-		Annotation document = new Annotation(inputText);
+		
+		String issue = "File fbsi-oracle-line-item was very large to send through Axway. So BIDNOFP15 failed";
+		List<String> issueList = new ArrayList<String>();
+		processSentence(props, issue, issueList);
+		
+		String issueTags = String.join(";", issueList);
+		
+		String solution = "The file was resent successfully using ftp process";
+		List<String> solnList = new ArrayList<String>();
+		processSentence(props, solution, solnList);
+		
+		String solnTags = String.join(";", solnList);
+		
+		String user = "A558985";
+		
+		NLPService nlpService = new NLPService();
+		nlpService.insertValues(entity, issueTags, solnTags, "weekly", user);
+	}
+
+	private static void processSentence(Properties props, String input, List<String> listText) {
+		Annotation document = new Annotation(input);
 
 		// Finally we use the pipeline to annotate the document we created
+		StanfordCoreNLP pipeLine = new StanfordCoreNLP(props);
 		pipeLine.annotate(document);
 
 		/*
@@ -63,18 +91,16 @@ public class TestNlp {
 
 				// Extracting Part Of Speech
 				String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+				// System.out.println("text=" + text + ";NER=" + ner + ";POS=" +
+				// pos + ";LEMMA=" + lemma);
+				if (!ner.equalsIgnoreCase("DATE")) {
+					if (pos.startsWith("RB") || pos.startsWith("VB") || pos.startsWith("NN") || pos.startsWith("JJ")) {
+						if (!listText.contains(text)) {
+							listText.add(text);
+						}
+					}
+				}
 
-				// Extracting the Lemma
-				String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
-				System.out.println("text=" + text + ";NER=" + ner + ";POS=" + pos + ";LEMMA=" + lemma);
-
-				/*
-				 * There are more annotation that are available for extracting
-				 * (depending on which "annotators" you initiated with the
-				 * pipeline properties", examine the token, sentence and
-				 * document objects to find any relevant annotation you might
-				 * need
-				 */
 			}
 		}
 	}

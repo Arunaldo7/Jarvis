@@ -1,1 +1,2 @@
-The job BIDFP015 failed beacuse the file fbsi-oracle-line-item was very large to send. So manually sent through ftp.
+The job BIDFP015 failed  today because the file fbsi-oracle-line-item was very large arounf 14 GB to send. So manually sent through ftp.
+Odate is 15-Jan-2017.
