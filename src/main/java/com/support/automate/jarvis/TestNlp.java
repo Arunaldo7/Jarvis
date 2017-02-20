@@ -15,6 +15,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.util.StringUtils;
 
 public class TestNlp {
 
@@ -40,24 +41,33 @@ public class TestNlp {
 
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 
-		String entity = "BIDNOFP15";
+		String entity = "BIDJOB1";
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         @SuppressWarnings("deprecation")
-		String date = dateFormat.format( new Date("15-JAN-2017"));
+		String date = dateFormat.format( new Date("30-JAN-2017"));
 
-		
-		String issue = "File fbsi-oracle-line-item was very large to send through Axway. So BIDNOFP15 failed";
+        
+		String issue = "job issue has primary key violation";
 		List<String> issueList = new ArrayList<String>();
 		processSentence(props, issue, issueList);
 		
-		String issueTags = String.join(";", issueList);
+		String issueTags = String.join(" ", issueList);
 		
-		String solution = "The file was resent successfully using ftp process";
+		issueList = (List<String>) StringUtils.getNgramsString(issueTags, 2, 2);
+		
+		issueTags = String.join(";", issueList);
+		
+		String solution = "no known solution has been identified for the issue yet";
+		System.out.println("N Grams : " + StringUtils.getNgramsString(solution, 2, 2));
 		List<String> solnList = new ArrayList<String>();
 		processSentence(props, solution, solnList);
 		
-		String solnTags = String.join(";", solnList);
+		String solnTags = String.join(" ", solnList);
+		
+		solnList = (List<String>) StringUtils.getNgramsString(solnTags, 2, 2);
+		
+		solnTags = String.join(";", solnList);
 		
 		String user = "A558985";
 		
