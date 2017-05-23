@@ -4,14 +4,13 @@ import web
 
 urls = (
     '/chat/', 'chatbot',
-)
+);
 
-app = web.application(urls, globals())
+app = web.application(urls, globals());
 
 
 class chatbot:
     def POST(self):
-        #print()
         import numpy as np;
         import matplotlib.pyplot as plt;
         import pandas as pd;
@@ -19,6 +18,7 @@ class chatbot:
         np.set_printoptions(threshold=np.nan);
         #importing the dataset
         dataset = pd.read_csv(r"F:\Programs\Machine Learning\Machine Learning A-Z\Part 7 - Natural Language Processing\Section 36 - Natural Language Processing\Natural_Language_Processing\chatbot.tsv",delimiter = "\t", quoting = 3);
+        #Add user input to last line of csv
         dataset.loc[dataset.shape[0]] = [dict(web.input())["key"],"search"];   
                              
         #cleaning the texts
@@ -85,4 +85,4 @@ class chatbot:
         return decoder[-1]
 
 if __name__ == "__main__":
-    app.run()
+    app.run();
