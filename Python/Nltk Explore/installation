@@ -1,0 +1,13 @@
+#tflearn
+Install curses first from wheel
+pip install git+https://github.com/tflearn/tflearn.git
+install tensorflow models from github
+pip install gensim
+conda install m2w64-toolchain
+pip install keras --upgrade
+http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
+conda install libpython
+change keras.json to theano
+conda install -c anaconda theano=0.9.0
+conda update mkl
+theanorc.txt

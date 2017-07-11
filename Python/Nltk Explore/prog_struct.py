@@ -9,7 +9,7 @@ nested = [[]] * 3;
 nested[1] = ['Monty'];
 nested[1].append('Python');
 
-print(nested);
+print(nested); 
 
 empty = [];
 nested = [empty, empty, empty];
